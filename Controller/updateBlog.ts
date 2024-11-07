@@ -1,5 +1,6 @@
 import express, { Request, Response, Router } from 'express';
 import { blogmodel } from '../Model/blogsSchema';
+import { upload, uploadToCloudinary } from '../middleware/upload';  // Assuming you've set up these middlewares
 
 const router = Router();
 
@@ -28,7 +29,7 @@ const router = Router();
  *                 example: "book1"
  *               content:
  *                 type: string
- *                 example: "welcome to the capital city of Ghana "
+ *                 example: "welcome to the capital city of Ghana"
  *               author:
  *                 type: string
  *                 example: "Jane Doe"
@@ -70,34 +71,46 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-export const updateRouter = router.put('/:id', async (req: Request, res: Response) => {
+export const updateRouter = router.put('/:id', upload.single('image'), uploadToCloudinary, async (req: Request, res: Response) => {
     const { id } = req.params;
+
     if (!id) {
-        res.status(400).send({ message: 'No ID is found' });
-        return;
-    }
-    if (!req.body) {
-        res.status(400).send({ message: 'Request body is not defined' });
-        return;
+     res.status(400).send({ message: 'No ID is found' });
+    return;
     }
 
-    const { title, content, author, imgUrl, date } = req.body;
+    // Ensure both body and file are present
+    if (!req.body && !req.file) {
+    res.status(400).send({ message: 'Request body or image is not defined' });
+   return;
+}
+
+    const { title, content, author, date } = req.body;
+    // Use the Cloudinary URL or existing imgUrl from the request body
+    const imgUrl = req.body.imageUrl || req.body.imgUrl || '';  // You can set a default image URL here if needed
+
+    if (!title || !content || !author || !date) {
+        res.status(400).send({ message: 'All fields (title, content, author, date) must be filled' });
+   return;
+    }
+
     try {
-        const results = await blogmodel.findByIdAndUpdate(id, {
-            title: title,
-            content: content,
-            author: author,
-            imgUrl: imgUrl,
-            date: date
-        }, {
-            new: true
-        });
-        if (results) {
-            res.status(200).send({ data: results });
+        // Perform the update with the updated blog data
+        const updatedBlog = await blogmodel.findByIdAndUpdate(
+            id,
+            { title, content, author, imgUrl, date },
+            { new: true }  // Return the updated document
+        );
+
+        // If blog is updated successfully, return the updated data
+        if (updatedBlog) {
+            res.status(200).json({ data: updatedBlog });
+            
         } else {
-            res.status(400).send({ message: 'Cannot find matching ID' });
+         res.status(400).send({ message: 'Cannot find matching ID' });
         }
     } catch (error) {
-        res.status(500).send({ message: 'Internal server error' });
+        console.error('Error updating blog:', error);
+ res.status(500).send({ message: 'Internal server error' });
     }
 });
