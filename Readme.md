@@ -56,7 +56,7 @@ To run this API locally, follow the steps below.
 4. Create a `.env` file in the root directory and set your MongoDB connection string:
 
    ```env
-   MONGODB_URI=mongodb://localhost:27017/blog-api
+   MONGODB_URI=mongodb://localhost:27017/web-api
    ```
 
 5. Run the app:
