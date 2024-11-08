@@ -68,8 +68,8 @@ const router = Router();
 
 export const postrouter = router.post('/create-blog', upload.single('image'), uploadToCloudinary, async (req: Request, res: Response) => {
     const { title, content, author, date } = req.body;
-    const imgUrl = req.body.imageUrl;  // Get the image URL from Cloudinary
-
+    const imgUrl = req.body.imageUrl;  
+console.log(req.body)
     if (!title || !content || !author || !date || !imgUrl) {
          res.status(400).send({ message: 'all fields must be filled' });
     return;
@@ -81,7 +81,7 @@ export const postrouter = router.post('/create-blog', upload.single('image'), up
             title,
             content,
             author,
-            imgUrl,  // Store the Cloudinary image URL
+            imgUrl,  
             date,
         });
 
