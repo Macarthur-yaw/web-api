@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from 'express';
 import { blogmodel } from '../Model/blogsSchema';
-import { upload, uploadToCloudinary } from '../middleware/upload';  // Assuming you've set up these middlewares
 
 const router = Router();
 
@@ -71,7 +70,7 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-export const updateRouter = router.put('/:id', upload.single('image'), uploadToCloudinary, async (req: Request, res: Response) => {
+export const updateRouter = router.put('/:id',  async (req: Request, res: Response) => {
     const { id } = req.params;
 
     if (!id) {
@@ -85,24 +84,22 @@ export const updateRouter = router.put('/:id', upload.single('image'), uploadToC
    return;
 }
 
-    const { title, content, author, date } = req.body;
-    // Use the Cloudinary URL or existing imgUrl from the request body
-    const imgUrl = req.body.imageUrl || req.body.imgUrl || '';  // You can set a default image URL here if needed
-
+    const { title, content, author, date ,imgUrl} = req.body;
+ 
     if (!title || !content || !author || !date) {
         res.status(400).send({ message: 'All fields (title, content, author, date) must be filled' });
    return;
     }
 
     try {
-        // Perform the update with the updated blog data
+       
         const updatedBlog = await blogmodel.findByIdAndUpdate(
             id,
             { title, content, author, imgUrl, date },
-            { new: true }  // Return the updated document
+            { new: true }  
         );
 
-        // If blog is updated successfully, return the updated data
+        
         if (updatedBlog) {
             res.status(200).json({ data: updatedBlog });
             

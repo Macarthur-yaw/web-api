@@ -75,16 +75,15 @@ To run this API locally, follow the steps below.
 
 #### Request Headers
 
-- `Content-Type`: `multipart/form-data`
+- `Content-Type`: `application/json`
 
 #### Request Body
 
-Use `multipart/form-data` encoding, as shown below. The `imgUrl` field should be uploaded as a file.
 
 - **title** (string) - Title of the blog post.
 - **content** (string) - Content of the blog post.
 - **author** (string) - Author's name.
-- **image** (file) - Image file for the blog post.
+- **imgUrl** (file) - Image file for the blog post.
 - **date** (string) - Date of the post (optional).
 
 #### Example
@@ -95,10 +94,10 @@ Use `multipart/form-data` encoding, as shown below. The `imgUrl` field should be
   "content": "Content of the blog post.",
   "author": "Author Name",
   "date": "2024-11-08"
+  ,"imgUrl":"https://google.com/image.png"
 }
 ```
 
-_Note: When testing with tools like Postman, select "form-data" in the body section and add `image` as a file input._
 
 #### Responses
 
@@ -149,7 +148,8 @@ _Note: When testing with tools like Postman, select "form-data" in the body sect
 {
   "title": "Updated Blog Title",
   "content": "Updated content of the blog post.",
-  "author": "Updated Author Name"
+  "author": "Updated Author Name",
+  "imgUrl":"https://google.com/pp"
 }
 ```
 

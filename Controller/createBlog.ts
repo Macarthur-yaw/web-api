@@ -1,6 +1,5 @@
 import express, { Request, Response, Router } from 'express';
-import { blogmodel } from '../Model/blogsSchema';  // Your blog model
-import { upload, uploadToCloudinary } from '../middleware/upload';  // Importing Multer and Cloudinary middleware
+import { blogmodel } from '../Model/blogsSchema';  
 
 const router = Router();
 
@@ -66,10 +65,10 @@ const router = Router();
  *                   example: "internal server error"
  */
 
-export const postrouter = router.post('/create-blog', upload.single('image'), uploadToCloudinary, async (req: Request, res: Response) => {
-    const { title, content, author, date } = req.body;
-    const imgUrl = req.body.imageUrl;  
-console.log(req.body)
+export const postrouter = router.post('/create-blog',  async (req: Request, res: Response) => {
+    const { title, content, author, date,imgUrl } = req.body;
+      
+console.log(imgUrl)
     if (!title || !content || !author || !date || !imgUrl) {
          res.status(400).send({ message: 'all fields must be filled' });
     return;
