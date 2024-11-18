@@ -107,7 +107,7 @@ To run this API locally, follow the steps below.
 
 ### Get All Blog Posts
 
-- **Endpoint**: `/api/v1/blogs`
+- **Endpoint**: `/api/v1/`
 - **Method**: `GET`
 - **Description**: Retrieves all blog posts.
 
