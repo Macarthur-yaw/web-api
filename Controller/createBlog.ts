@@ -77,16 +77,17 @@ console.log(imgUrl)
 
     try {
         const newblog = new blogmodel({
-            title,
-            content,
-            author,
-            imgUrl,  
-            date,
+            title:title,
+            content:content,
+            author:author,
+            imgurl:imgUrl,  
+            date:date,
         });
 
         await newblog.save();
         res.status(201).send({ message: 'created' });
     } catch (error) {
+       
         res.status(500).send({ message: 'internal server error' });
     }
 });
